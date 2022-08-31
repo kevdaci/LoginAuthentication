@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  waitfordb:
+      image: dadarek/wait-for-dependencies
+      depends_on:
+        - db 
+      command: db:5432
+
+  webserver:
+    container_name: webserver
+    image: webserver
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - SQLALCHEMY_DATABASE_URI=postgresql://admin:randompassword@db:5432/users
+      - SECRET_KEY=SUPER_SECRET_KEY
+    depends_on:
+      - waifordb
+      - db
+
+  db:
+    container_name: db
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=randompassword
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=users
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
+
+
+volumes:
+  postgresdata: {}
