@@ -1,3 +1,5 @@
+### LoginAuthentication
+
 #### Summary
 I created a REST API that allows users to sign up (with a valid email address and passoword), log in, and log out.
 
